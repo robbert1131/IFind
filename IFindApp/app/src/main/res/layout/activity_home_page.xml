@@ -24,17 +24,6 @@
         android:layout_alignParentStart="true"
         android:contentDescription="Logo" />
 
-    <SeekBar
-        android:layout_width="wrap_content"
-        android:id="@+id/seekBar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2"
-        android:layout_alignRight="@+id/seekBar3"
-        android:layout_alignEnd="@+id/seekBar3"
-        android:secondaryProgressTint="@color/White"
-        android:layout_height="60px" />
-
     <TextView
         android:text="Afstand"
         android:layout_width="wrap_content"
@@ -45,29 +34,6 @@
         android:layout_alignLeft="@+id/seekBar"
         android:textColor="@color/White"
         android:layout_alignStart="@+id/seekBar" />
-
-    <SeekBar
-        android:layout_width="wrap_content"
-        android:layout_height="60px"
-        android:id="@+id/seekBar3"
-        android:layout_above="@+id/textView2"
-        android:layout_marginBottom="17dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        style="@style/Widget.AppCompat.SeekBar" />
-
-    <TextView
-        android:text="Prijs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_marginBottom="15dp"
-        android:layout_above="@+id/seekBar3"
-        android:layout_alignParentLeft="true"
-        android:textColor="@color/White"
-        android:layout_alignParentStart="true" />
 
     <TextView
         android:text="Zoeken in omschrijving"
@@ -146,5 +112,33 @@
         android:layout_alignRight="@+id/textView2"
         android:layout_alignEnd="@+id/textView2"
         android:visibility="visible" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:id="@+id/Rprijs"
+        android:layout_above="@+id/textView2"
+        android:layout_alignLeft="@+id/Rja"
+        android:layout_alignStart="@+id/Rja"></LinearLayout>
+
+    <TextView
+        android:text="Prijs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textColor="@color/White"
+        android:layout_above="@+id/Rprijs"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="60px"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/RAfstand"></LinearLayout>
 
 </RelativeLayout>
