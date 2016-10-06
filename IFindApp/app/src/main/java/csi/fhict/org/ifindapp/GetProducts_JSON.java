@@ -58,20 +58,25 @@ public class GetProducts_JSON {
 
         try {
             String Title = jProducts.getString("Title");
-            //String Title_url = jProducts.getString("Title_url");
+            String Title_url = jProducts.getString("Title_url");
             String Desc = jProducts.getString("Desc");
-            String flag = jProducts.getString("Img");
+            String Image = jProducts.getString("Img");
             String Prijs = jProducts.getString("Prijs");
             String Date = jProducts.getString("Date");
             String Loc = jProducts.getString("Loc");
 
+            char bieden = Prijs.charAt(0);
             //Put it in the hashmap
             product.put("Title", Title);
-            //product.put("Title_url", Title_url);
+            product.put("Title_url", Title_url);
             product.put("Desc", Desc);
-            product.put("flag", R.drawable.blank);
-            product.put("flag_path", flag);
-            product.put("Prijs", Prijs);
+            product.put("img", R.drawable.blank);
+            product.put("img_path", Image);
+            if(Character.isLetter(bieden)){
+                product.put("Prijs", Prijs);
+            }else {
+                product.put("Prijs", "€ " + Prijs);
+            }
             product.put("Date", Date);
             product.put("Loc", Loc);
 

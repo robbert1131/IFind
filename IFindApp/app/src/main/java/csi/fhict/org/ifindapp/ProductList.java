@@ -1,5 +1,6 @@
 package csi.fhict.org.ifindapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -7,6 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -30,6 +33,8 @@ import java.util.List;
 public class ProductList extends AppCompatActivity {
 
     ListView mListView;
+    SimpleAdapter adap;
+    String imgurl;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,9 +42,7 @@ public class ProductList extends AppCompatActivity {
         setContentView(R.layout.product_list);
 
         // URL to the JSON data
-        //String strUrl = "http://wptrafficanalyzer.in/p/demo1/first.php/countries";
-        //String strUrl = "http://95.97.27.12/IFind/run_results1.json";
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=GTX";
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php";
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
@@ -50,7 +53,23 @@ public class ProductList extends AppCompatActivity {
         // Getting a reference to ListView of activity_main
         mListView = (ListView) findViewById(R.id.product_list);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //Get the name from the array that is in the same position as the chosen listitem.
+                //Todo start intent and pass name using putExtra
+                SimpleAdapter adapter = adap;
+                int pos = position;
 
+                HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(pos);
+                imgurl = (String) hm.get("Title_url");
+
+                Intent intent = new Intent(getApplicationContext(), ProductView.class);
+                intent.putExtra("product", imgurl);
+
+                startActivity(intent);
+            }
+        });
     }
 
     /** A method to download json data from url */
@@ -138,27 +157,27 @@ public class ProductList extends AppCompatActivity {
             GetProducts_JSON productJsonParser = new GetProducts_JSON();
 
             // A list object to store the parsed countries list
-            List<HashMap<String, Object>> countries = null;
+            List<HashMap<String, Object>> product = null;
 
             try{
                 // Getting the parsed data as a List construct
-                countries = productJsonParser.parse(jObject);
+                product = productJsonParser.parse(jObject);
             }catch(Exception e){
                 Log.d("Exception",e.toString());
             }
 
             // Keys used in Hashmap
             String[] from = { "Title",
-                    "Desc", "flag", "Date", "Prijs", "Loc"};
+                    "Desc", "img", "Date", "Prijs", "Loc"};
 
             // Ids of views in listview_layout
             int[] to = { R.id.Title, R.id.Desc,  R.id.Image_product, R.id.Date, R.id.Price, R.id.Loc};
 
             // Instantiating an adapter to store each items
             // R.layout.listview_layout defines the layout of each item
-            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), countries, R.layout.product_listview, from, to);
+            adap = new SimpleAdapter(getBaseContext(), product, R.layout.product_listview, from, to);
 
-            return adapter;
+            return adap;
         }
 
         /** Invoked by the Android on "doInBackground" is executed */
@@ -170,11 +189,11 @@ public class ProductList extends AppCompatActivity {
 
             for(int i=0;i<adapter.getCount();i++){
                 HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(i);
-                String imgUrl = (String) hm.get("flag_path");
+                String imgUrl = (String) hm.get("img_path");
                 ImageLoaderTask imageLoaderTask = new ImageLoaderTask();
 
                 HashMap<String, Object> hmDownload = new HashMap<String, Object>();
-                hm.put("flag_path",imgUrl);
+                hm.put("img_path",imgUrl);
                 hm.put("position", i);
 
                 // Starting ImageLoaderTask to download and populate image in the listview
@@ -190,7 +209,7 @@ public class ProductList extends AppCompatActivity {
         protected HashMap<String, Object> doInBackground(HashMap<String, Object>... hm) {
 
             InputStream iStream=null;
-            String imgUrl = (String) hm[0].get("flag_path");
+            String imgUrl = (String) hm[0].get("img_path");
             int position = (Integer) hm[0].get("position");
 
             URL url;
@@ -231,7 +250,7 @@ public class ProductList extends AppCompatActivity {
                 HashMap<String, Object> hmBitmap = new HashMap<String, Object>();
 
                 // Storing the path to the temporary image file
-                hmBitmap.put("flag",tmpFile.getPath());
+                hmBitmap.put("img",tmpFile.getPath());
 
                 // Storing the position of the image in the listview
                 hmBitmap.put("position",position);
@@ -249,7 +268,7 @@ public class ProductList extends AppCompatActivity {
         @Override
         protected void onPostExecute(HashMap<String, Object> result) {
             // Getting the path to the downloaded image
-            String path = (String) result.get("flag");
+            String path = (String) result.get("img");
 
             // Getting the position of the downloaded image
             int position = (Integer) result.get("position");
@@ -261,7 +280,7 @@ public class ProductList extends AppCompatActivity {
             HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(position);
 
             // Overwriting the existing path in the adapter
-            hm.put("flag",path);
+            hm.put("img",path);
 
             // Noticing listview about the dataset changes
             adapter.notifyDataSetChanged();

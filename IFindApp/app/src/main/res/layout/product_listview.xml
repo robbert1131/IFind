@@ -9,21 +9,22 @@
         android:id="@+id/Image_product" />
 
     <LinearLayout
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="5dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Title"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorBlack"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Desc"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorAccent"/>
 
     </LinearLayout>
     <LinearLayout
@@ -35,19 +36,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Price"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorAccent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Loc"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:paddingBottom="20dp"
+            android:paddingLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Date"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:paddingLeft="10dp"/>
 
     </LinearLayout>
 
