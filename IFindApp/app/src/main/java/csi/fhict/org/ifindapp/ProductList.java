@@ -41,8 +41,9 @@ public class ProductList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list);
 
+        String title = getIntent().getExtras().getString("Title");
         // URL to the JSON data
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php";
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
