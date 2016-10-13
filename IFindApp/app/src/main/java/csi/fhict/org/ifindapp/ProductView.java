@@ -21,6 +21,6 @@ public class ProductView extends AppCompatActivity {
         webview.loadUrl(position);
         webview.setWebViewClient(new WebViewClient());
         webview.getSettings().setJavaScriptEnabled(true);
-        
+
     }
 }
