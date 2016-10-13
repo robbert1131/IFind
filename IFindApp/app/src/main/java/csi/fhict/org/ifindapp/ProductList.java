@@ -42,8 +42,8 @@ public class ProductList extends AppCompatActivity {
         setContentView(R.layout.product_list);
 
         String title = getIntent().getExtras().getString("Title");
-        String Minprijs = getIntent().getExtras().getString("minprijs");
-        String Maxprijs = getIntent().getExtras().getString("maxprijs");
+        int Minprijs = getIntent().getExtras().getInt("minprijs");
+        int Maxprijs = getIntent().getExtras().getInt("maxprijs");
         // URL to the JSON data
         String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs;
 
