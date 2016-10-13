@@ -28,7 +28,7 @@
         android:text="Afstand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
+        android:id="@+id/tvAfstand"
         android:layout_marginBottom="25dp"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/seekBar"
@@ -39,7 +39,7 @@
         android:text="Zoeken in omschrijving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:id="@+id/tvzoeken"
         android:layout_marginBottom="15dp"
         android:layout_above="@+id/Rnee"
         android:textColor="@color/White"
@@ -47,28 +47,16 @@
         android:layout_alignParentStart="true" />
 
     <RadioButton
-        android:text="Nee"
-        android:layout_width="wrap_content"
-        android:layout_height="60px"
-        android:id="@+id/Rnee"
-        android:layout_alignBaseline="@+id/Rja"
-        android:layout_alignBottom="@+id/Rja"
-        android:layout_alignLeft="@+id/Bspecefiek"
-        android:textColor="@color/White"
-        android:layout_alignStart="@+id/Bspecefiek"
-        app:buttonTint="@android:color/white" />
-
-    <RadioButton
         android:text="Ja"
         android:layout_width="wrap_content"
         android:layout_height="60px"
         android:id="@+id/Rja"
         android:layout_marginBottom="18dp"
-        android:layout_above="@+id/textView3"
-        android:layout_alignRight="@+id/textView3"
+        android:layout_above="@+id/tvAfstand"
+        android:layout_alignRight="@+id/tvAfstand"
         android:textColor="@color/White"
         android:drawableTint="@color/White"
-        android:layout_alignEnd="@+id/textView3"
+        android:layout_alignEnd="@+id/tvAfstand"
         android:checked="false"
         android:buttonTint="@android:color/white" />
 
@@ -109,8 +97,8 @@
         android:id="@+id/bZoeken"
         android:textColor="@color/background"
         android:layout_below="@+id/etZoek"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignRight="@+id/tvzoeken"
+        android:layout_alignEnd="@+id/tvzoeken"
         android:visibility="visible" />
 
     <LinearLayout
@@ -118,7 +106,7 @@
         android:layout_width="match_parent"
         android:layout_height="60px"
         android:id="@+id/Rprijs"
-        android:layout_above="@+id/textView2"
+        android:layout_above="@+id/tvzoeken"
         android:layout_alignLeft="@+id/Rja"
         android:layout_alignStart="@+id/Rja"></LinearLayout>
 
@@ -126,7 +114,7 @@
         android:text="Prijs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/tbPrijs"
         android:textColor="@color/White"
         android:layout_above="@+id/Rprijs"
         android:layout_alignParentLeft="true"
@@ -140,5 +128,17 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/RAfstand"></LinearLayout>
+
+    <RadioButton
+        android:text="Nee"
+        android:layout_width="wrap_content"
+        android:layout_height="60px"
+        android:id="@+id/Rnee"
+        android:textColor="@color/White"
+        app:buttonTint="@android:color/white"
+        android:layout_alignBaseline="@+id/Rja"
+        android:layout_alignBottom="@+id/Rja"
+        android:layout_alignLeft="@+id/Bspecefiek"
+        android:layout_alignStart="@+id/Bspecefiek" />
 
 </RelativeLayout>

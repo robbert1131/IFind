@@ -45,15 +45,15 @@
         android:id="@+id/bZoeken"
         android:textColor="@color/background"
         android:layout_below="@+id/etZoek"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignRight="@+id/tvzoeken"
+        android:layout_alignEnd="@+id/tvzoeken"
         android:visibility="visible" />
 
     <TextView
         android:text="Prijs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
+        android:id="@+id/tbPrijs"
         android:textColor="@color/White"
         android:layout_marginTop="15dp"
         android:layout_below="@+id/bZoeken"
@@ -80,7 +80,7 @@
         android:text="Afstand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView3"
+        android:id="@+id/tvAfstand"
         android:textColor="@color/White"
         android:layout_below="@+id/Rprijs"
         android:layout_alignParentLeft="true"
@@ -94,14 +94,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView"></LinearLayout>
+        android:layout_below="@+id/tbPrijs"></LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:id="@+id/RAfstand"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
+        android:layout_below="@+id/tvAfstand"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="16dp"></LinearLayout>
@@ -110,7 +110,7 @@
         android:text="Zoeken in omschrijving"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
+        android:id="@+id/tvzoeken"
         android:textColor="@color/White"
         android:layout_marginBottom="17dp"
         android:layout_alignParentBottom="true"
