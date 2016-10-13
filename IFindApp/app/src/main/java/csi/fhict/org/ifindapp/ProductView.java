@@ -3,6 +3,7 @@ package csi.fhict.org.ifindapp;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 /**
@@ -18,8 +19,8 @@ public class ProductView extends AppCompatActivity {
         String position = getIntent().getExtras().getString("product");
         WebView webview = (WebView) findViewById(R.id.webView);
         webview.loadUrl(position);
-
-        //Toast.makeText(this, position,Toast.LENGTH_LONG).show();
-
+        webview.setWebViewClient(new WebViewClient());
+        webview.getSettings().setJavaScriptEnabled(true);
+        
     }
 }
