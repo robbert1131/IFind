@@ -54,7 +54,7 @@ public class HomePage extends AppCompatActivity {
         if (isNetworkAvailable() == false){
             Context context = getApplicationContext();
             CharSequence text = "No active internet connection please connect to the internet!";
-            int duration = Toast.LENGTH_SHORT;
+            int duration = Toast.LENGTH_LONG;
 
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
