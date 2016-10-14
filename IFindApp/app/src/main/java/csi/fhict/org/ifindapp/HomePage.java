@@ -2,6 +2,7 @@ package csi.fhict.org.ifindapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -187,7 +189,22 @@ public class HomePage extends AppCompatActivity {
                     rangeSeekBar.setSelectedMaxValue(Integer.valueOf(separated[1]));
 
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+
+                    Rect r = new Rect();
+                    v.getWindowVisibleDisplayFrame(r);
+                    int screenHeight = v.getRootView().getHeight();
+
+                    // r.bottom is the position above soft keypad or device button.
+                    // if keypad is shown, the r.bottom is smaller than that before.
+                    int keypadHeight = screenHeight - r.bottom;
+
+                    Log.d("TAG", "keypadHeight = " + keypadHeight);
+
+                    if (keypadHeight > screenHeight * 0.15) { // 0.15 ratio is perhaps enough to determine keypad height.
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    }
+
 
                 //}
                 /*else {
