@@ -8,7 +8,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -35,12 +38,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static android.widget.Toast.*;
+
 public class HomePage extends AppCompatActivity {
     Button bZoeken;
     Button Bspecefiek;
     TextView prijs;
     TextView aftstand;
     TextView desc;
+    EditText searchterm;
     LinearLayout layout;
     LinearLayout layout1;
     RadioButton radiodesc;
@@ -48,6 +54,7 @@ public class HomePage extends AppCompatActivity {
     String artname = "";
     Integer count = 0;
     String R2 = "";
+    Integer enabledbuttons = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +62,10 @@ public class HomePage extends AppCompatActivity {
 
         if (isNetworkAvailable() == false){
             Context context = getApplicationContext();
-            CharSequence text = "No active internet connection please connect to the internet!";
-            int duration = Toast.LENGTH_LONG;
+            CharSequence text = "Geen actieve internet verbinding check uw verbinding!";
+            int duration = LENGTH_LONG;
 
-            Toast toast = Toast.makeText(context, text, duration);
+            Toast toast = makeText(context, text, duration);
             toast.show();
         }
 
@@ -101,6 +108,29 @@ public class HomePage extends AppCompatActivity {
 
         bZoeken = (Button) findViewById(R.id.bZoeken);
         Bspecefiek = (Button) findViewById(R.id.Bspecefiek);
+        bZoeken.setEnabled(false);
+        Bspecefiek.setEnabled(false);
+        searchterm = (EditText) findViewById(R.id.etZoek);
+
+        Context context = getApplicationContext();
+        CharSequence text = "U moet een zoekterm invullen voordat u kan gaan zoeken";
+        int duration = LENGTH_LONG;
+
+        Toast toast = makeText(context, text, duration);
+        toast.show();
+
+        searchterm.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                enabledbuttons++;
+                if (enabledbuttons == 1) {
+                    bZoeken.setEnabled(true);
+                    Bspecefiek.setEnabled(true);
+                }
+                return false;
+            }
+        });
 
        radiodesc.setOnClickListener(new View.OnClickListener(){
            public void onClick(View v) {
@@ -132,14 +162,12 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
              if (count == 0) {
-                 EditText searchterm = (EditText) findViewById(R.id.etZoek);
                  String zoekterm = searchterm.getText().toString();
                  Intent i = new Intent(getApplicationContext(), ProductList.class);
                  i.putExtra("Title", zoekterm);
                  startActivity(i);
              }
                 else {
-                 EditText searchterm = (EditText) findViewById(R.id.etZoek);
                  String zoekterm = searchterm.getText().toString();
                  radiodesc = (RadioButton) findViewById(R.id.Rja);
                  boolean Desc = radiodesc.isChecked();
