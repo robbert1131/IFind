@@ -44,8 +44,9 @@ public class ProductList extends AppCompatActivity {
         String title = getIntent().getExtras().getString("Title");
         int Minprijs = getIntent().getExtras().getInt("minprijs");
         int Maxprijs = getIntent().getExtras().getInt("maxprijs");
+        boolean Desc = getIntent().getExtras().getBoolean("Desc");
         // URL to the JSON data
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs;
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
