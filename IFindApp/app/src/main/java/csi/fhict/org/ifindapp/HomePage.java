@@ -72,7 +72,7 @@ public class HomePage extends AppCompatActivity {
 
         radiodesc2 = (RadioButton) findViewById(R.id.Rnee);
         radiodesc2.setVisibility(View.GONE);
-
+        radiodesc2.toggle();
         radiodesc = (RadioButton) findViewById(R.id.Rja);
         radiodesc.setVisibility(View.GONE);
 
@@ -99,6 +99,33 @@ public class HomePage extends AppCompatActivity {
 
         bZoeken = (Button) findViewById(R.id.bZoeken);
         Bspecefiek = (Button) findViewById(R.id.Bspecefiek);
+
+       radiodesc.setOnClickListener(new View.OnClickListener(){
+           public void onClick(View v) {
+               if (radiodesc.isChecked() == true){
+                   radiodesc2.setChecked(false);
+                   //radiodesc.setChecked(true);
+               }
+               else{
+                   radiodesc2.setChecked(true);
+                   radiodesc.setChecked(false);
+               }
+           }
+       });
+
+        radiodesc2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                if (radiodesc2.isChecked() == true){
+                    radiodesc.setChecked(false);
+                    //radiodesc2.setChecked(true);
+                }
+                else{
+                    radiodesc.setChecked(true);
+                    radiodesc2.setChecked(false);
+                }
+            }
+        });
+
         bZoeken.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
