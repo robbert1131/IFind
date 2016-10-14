@@ -2,6 +2,8 @@ package csi.fhict.org.ifindapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +50,16 @@ public class HomePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
+        if (isNetworkAvailable() == false){
+            Context context = getApplicationContext();
+            CharSequence text = "No active internet connection please connect to the internet!";
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
 
         prijs = (TextView) findViewById(R.id.tbPrijs);
         prijs.setVisibility(View.GONE);
@@ -218,5 +230,10 @@ public class HomePage extends AppCompatActivity {
 
             //super.onPostExecute(s);
         }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
