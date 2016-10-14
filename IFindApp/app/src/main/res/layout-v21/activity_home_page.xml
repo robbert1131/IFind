@@ -25,7 +25,7 @@
         android:contentDescription="Logo" />
 
     <Button
-        android:text="Specefieker"
+        android:text="Specifieker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Bspecefiek"
@@ -36,17 +36,6 @@
         android:layout_alignBottom="@+id/bZoeken"
         android:layout_alignRight="@+id/etZoek"
         android:layout_alignEnd="@+id/etZoek"
-        android:visibility="visible" />
-
-    <Button
-        android:text="Zoeken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bZoeken"
-        android:textColor="@color/background"
-        android:layout_below="@+id/etZoek"
-        android:layout_alignRight="@+id/tvzoeken"
-        android:layout_alignEnd="@+id/tvzoeken"
         android:visibility="visible" />
 
     <TextView
@@ -144,5 +133,18 @@
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/Bspecefiek"
         android:layout_alignStart="@+id/Bspecefiek" />
+
+    <Button
+        android:text="Zoeken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bZoeken"
+        android:textColor="@color/background"
+        android:visibility="visible"
+        android:layout_below="@+id/etZoek"
+        android:layout_toLeftOf="@+id/Bspecefiek"
+        android:layout_toStartOf="@+id/Bspecefiek"
+        android:layout_marginRight="22dp"
+        android:layout_marginEnd="22dp" />
 
 </RelativeLayout>
