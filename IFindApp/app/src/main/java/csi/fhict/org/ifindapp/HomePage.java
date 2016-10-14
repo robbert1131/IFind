@@ -1,11 +1,14 @@
 package csi.fhict.org.ifindapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -117,6 +120,7 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 count++;
+                R2 = "";
                 //if (count == 1){
                     desc.setVisibility(View.VISIBLE);
                     prijs.setVisibility(View.VISIBLE);
@@ -124,22 +128,28 @@ public class HomePage extends AppCompatActivity {
                     rangeSeekBar.setVisibility(View.VISIBLE);
                     RangeSeekBarafstand.setVisibility(View.VISIBLE);
                     radiodesc.setVisibility(View.VISIBLE);
-
+                    radiodesc2.setVisibility(View.VISIBLE);
                     TextView criteria = (TextView) findViewById(R.id.etZoek);
                     artname = (String) criteria.getText().toString();
 
                     new GetData().execute();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    while(R2 == "")
+                    {
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                     String[] separated = R2.split(",");
                     rangeSeekBar.setRangeValues(Integer.valueOf(separated[0]), Integer.valueOf(separated[1]) + 1);
                     rangeSeekBar.setSelectedMinValue(Integer.valueOf(separated[0]));
                     rangeSeekBar.setSelectedMaxValue(Integer.valueOf(separated[1]));
 
-                    radiodesc2.setVisibility(View.VISIBLE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
                 //}
                 /*else {
                     EditText searchterm = (EditText) findViewById(R.id.etZoek);
