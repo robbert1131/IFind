@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -30,23 +32,30 @@ import java.util.List;
  * Created by Gregory on 6-10-2016.
  */
 
-public class ProductList extends AppCompatActivity {
+public class ProductList extends AppCompatActivity implements ShakeEventManager.ShakeListener {
 
     ListView mListView;
     SimpleAdapter adap;
     String imgurl;
+    String RandomJa = "ja";
+    String title;
+    int Minprijs;
+    int Maxprijs;
+    boolean Desc;
+    private ShakeEventManager sd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list);
 
-        String title = getIntent().getExtras().getString("Title");
-        int Minprijs = getIntent().getExtras().getInt("minprijs");
-        int Maxprijs = getIntent().getExtras().getInt("maxprijs");
-        boolean Desc = getIntent().getExtras().getBoolean("Desc");
+
+        title = getIntent().getExtras().getString("Title");
+        Minprijs = getIntent().getExtras().getInt("minprijs");
+        Maxprijs = getIntent().getExtras().getInt("maxprijs");
+        Desc = getIntent().getExtras().getBoolean("Desc");
         // URL to the JSON data
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc;
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc; //+ "&Rand=" + RandomJa;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
@@ -56,6 +65,10 @@ public class ProductList extends AppCompatActivity {
 
         // Getting a reference to ListView of activity_main
         mListView = (ListView) findViewById(R.id.product_list);
+        //createData();
+        sd = new ShakeEventManager();
+        sd.setListener(this);
+        sd.init(this);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
@@ -295,5 +308,39 @@ public class ProductList extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
+    }
+
+    private void createData() {
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc + "&Rand=" + RandomJa;
+
+        // Creating a new non-ui thread task to download json data
+        DownloadTask downloadTask = new DownloadTask();
+
+        // Starting the download process
+        downloadTask.execute(strUrl);
+
+    }
+
+    @Override
+    public void onShake() {
+        createData();
+        //adpt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
+        Toast.makeText(this, "Refresh data...", Toast.LENGTH_SHORT).show();
+        //mListView.setAdapter(adap);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sd.register();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sd.deregister();
     }
 }
