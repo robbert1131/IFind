@@ -187,8 +187,8 @@ public class HomePage extends AppCompatActivity {
                  i.putExtra("km", afstand);
                  i.putExtra("minprijs", minprijs);
                  i.putExtra("maxprijs", maxprijs);
-                 i.putExtra("minkm", minkm);
-                 i.putExtra("maxkm", maxkm);
+                 i.putExtra("minkm", minkm.toString());
+                 i.putExtra("maxkm", maxkm.toString());
                  i.putExtra("x", x);
                  i.putExtra("y", y);
                  startActivity(i);
