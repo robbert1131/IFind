@@ -1,10 +1,14 @@
 package csi.fhict.org.ifindapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +21,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -27,8 +36,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 /**
  * Created by Gregory on 6-10-2016.
@@ -49,6 +60,11 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
     String minkm;
     String maxkm;
     private ShakeEventManager sd;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +82,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         maxkm = getIntent().getExtras().getString("maxkm");
         // URL to the JSON data
         String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc + "&Rand=" + RandomJa + "&X=" +
-                X + "&Y=" + Y + "&minkm=" + minkm + "&maxkm=" + maxkm ;
+                X + "&Y=" + Y + "&minkm=" + minkm + "&maxkm=" + maxkm;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
@@ -103,34 +119,49 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
 
         //Button pbutton = (Button) findViewById(R.id.btn_personal);
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void myClickHandler(View v)
-    {
+    public void myClickHandler(View v) {
         //get the row the clicked button is in
         LinearLayout vwParentRow = (LinearLayout) findViewById(R.id.layoutbutton);
-        Button btnChild = (Button)vwParentRow.getChildAt(3);
+        Button btnChild = (Button) vwParentRow.getChildAt(3);
         btnChild.setText("I've been clicked!");
         Log.d("clciked", "sdfsdf");
         final int position = mListView.getPositionForView(v);
         SimpleAdapter adapter = adap;
 
         HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(position);
-        imgurl = (String) hm.get("Title");
-        Intent intent = new Intent(this, PersonalList.class);
-        intent.putExtra("map", hm);
-        startActivity(intent);
+//        ArrayList<HashMap<String, Object>> arr = new ArrayList<HashMap<String, Object>>();
+//        arr.add(hm);
+//        Intent intent = new Intent(this, PersonalList.class);
+//        intent.putExtra("map", arr);
+//        startActivity(intent);
         //vwParentRow.refreshDrawableState();
+        hm.remove("position");
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        SharedPreferences keyValues = getApplicationContext().getSharedPreferences("Your_Shared_Prefs", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor keyValuesEditor = keyValues.edit();
+        for (String s : hm.keySet()) {
+            editor.putString(s, (String)hm.get(s));
+        }
+        editor.commit();
+        Intent intent = new Intent(this, PersonalList.class);
+        startActivity(intent);
     }
 
 
-
-    /** A method to download json data from url */
+    /**
+     * A method to download json data from url
+     */
     private String downloadUrl(String strUrl) throws IOException {
         String data = "";
         InputStream iStream = null;
-        try{
+        try {
             URL url = new URL(strUrl);
 
             // Creating an http connection to communicate with url
@@ -144,10 +175,10 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
 
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
-            StringBuffer sb  = new StringBuffer();
+            StringBuffer sb = new StringBuffer();
 
             String line = "";
-            while( ( line = br.readLine())  != null){
+            while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
 
@@ -155,27 +186,65 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
 
             br.close();
 
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("Exceptiondownloadingurl", e.toString());
-        }finally{
+        } finally {
             iStream.close();
         }
 
         return data;
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("ProductList Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 
 
-    /** AsyncTask to download json data */
+    /**
+     * AsyncTask to download json data
+     */
     private class DownloadTask extends AsyncTask<String, Integer, String> {
         String data = null;
+
         @Override
         protected String doInBackground(String... url) {
-            try{
+            try {
                 data = downloadUrl(url[0]);
 
-            }catch(Exception e){
-                Log.d("Background Task",e.toString());
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
             }
             return data;
         }
@@ -192,19 +261,22 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         }
     }
 
-    /** AsyncTask to parse json data and load ListView */
-    private class ListViewLoaderTask extends AsyncTask<String, Void, SimpleAdapter>{
+    /**
+     * AsyncTask to parse json data and load ListView
+     */
+    private class ListViewLoaderTask extends AsyncTask<String, Void, SimpleAdapter> {
 
         JSONObject jObject;
+
         // Doing the parsing of xml data in a non-ui thread
         @Override
         protected SimpleAdapter doInBackground(String... strJson) {
-            try{
+            try {
                 jObject = new JSONObject(strJson[0]);
                 GetProducts_JSON productJsonParser = new GetProducts_JSON();
                 productJsonParser.parse(jObject);
-            }catch(Exception e){
-                Log.d("JSON Exception1",e.toString());
+            } catch (Exception e) {
+                Log.d("JSON Exception1", e.toString());
             }
 
             // Instantiating json parser class
@@ -213,19 +285,19 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
             // A list object to store the parsed countries list
             List<HashMap<String, Object>> product = null;
 
-            try{
+            try {
                 // Getting the parsed data as a List construct
                 product = productJsonParser.parse(jObject);
-            }catch(Exception e){
-                Log.d("Exception",e.toString());
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
             }
 
             // Keys used in Hashmap
-            String[] from = { "Title",
+            String[] from = {"Title",
                     "Desc", "img", "Date", "Prijs", "Loc"};
 
             // Ids of views in listview_layout
-            int[] to = { R.id.Title, R.id.Desc,  R.id.Image_product, R.id.Date, R.id.Price, R.id.Loc};
+            int[] to = {R.id.Title, R.id.Desc, R.id.Image_product, R.id.Date, R.id.Price, R.id.Loc};
 
             // Instantiating an adapter to store each items
             // R.layout.listview_layout defines the layout of each item
@@ -236,20 +308,22 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
 
         }
 
-        /** Invoked by the Android on "doInBackground" is executed */
+        /**
+         * Invoked by the Android on "doInBackground" is executed
+         */
         @Override
         protected void onPostExecute(SimpleAdapter adapter) {
 
             // Setting adapter for the listview
             mListView.setAdapter(adapter);
 
-            for(int i=0;i<adapter.getCount();i++){
+            for (int i = 0; i < adapter.getCount(); i++) {
                 HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(i);
                 String imgUrl = (String) hm.get("img_path");
                 ImageLoaderTask imageLoaderTask = new ImageLoaderTask();
 
                 HashMap<String, Object> hmDownload = new HashMap<String, Object>();
-                hm.put("img_path",imgUrl);
+                hm.put("img_path", imgUrl);
                 hm.put("position", i);
 
                 // Starting ImageLoaderTask to download and populate image in the listview
@@ -258,13 +332,15 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         }
     }
 
-    /** AsyncTask to download and load an image in ListView */
-    private class ImageLoaderTask extends AsyncTask<HashMap<String, Object>, Void, HashMap<String, Object>>{
+    /**
+     * AsyncTask to download and load an image in ListView
+     */
+    private class ImageLoaderTask extends AsyncTask<HashMap<String, Object>, Void, HashMap<String, Object>> {
 
         @Override
         protected HashMap<String, Object> doInBackground(HashMap<String, Object>... hm) {
 
-            InputStream iStream=null;
+            InputStream iStream = null;
             String imgUrl = (String) hm[0].get("img_path");
             int position = (Integer) hm[0].get("position");
 
@@ -285,7 +361,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
                 File cacheDirectory = getBaseContext().getCacheDir();
 
                 // Temporary file to store the downloaded image
-                File tmpFile = new File(cacheDirectory.getPath() + "/wpta_"+position+".jpg");
+                File tmpFile = new File(cacheDirectory.getPath() + "/wpta_" + position + ".jpg");
 
                 // The FileOutputStream to the temporary file
                 FileOutputStream fOutStream = new FileOutputStream(tmpFile);
@@ -294,7 +370,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
                 Bitmap b = BitmapFactory.decodeStream(iStream);
 
                 // Writing the bitmap to the temporary file as png file
-                b.compress(Bitmap.CompressFormat.JPEG,100, fOutStream);
+                b.compress(Bitmap.CompressFormat.JPEG, 100, fOutStream);
 
                 // Flush the FileOutputStream
                 fOutStream.flush();
@@ -306,16 +382,16 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
                 HashMap<String, Object> hmBitmap = new HashMap<String, Object>();
 
                 // Storing the path to the temporary image file
-                hmBitmap.put("img",tmpFile.getPath());
+                hmBitmap.put("img", tmpFile.getPath());
 
                 // Storing the position of the image in the listview
-                hmBitmap.put("position",position);
+                hmBitmap.put("position", position);
 
                 // Returning the HashMap object containing the image path and position
                 return hmBitmap;
 
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
@@ -330,13 +406,13 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
             int position = (Integer) result.get("position");
 
             // Getting adapter of the listview
-            SimpleAdapter adapter = (SimpleAdapter ) mListView.getAdapter();
+            SimpleAdapter adapter = (SimpleAdapter) mListView.getAdapter();
 
             // Getting the hashmap object at the specified position of the listview
             HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(position);
 
             // Overwriting the existing path in the adapter
-            hm.put("img",path);
+            hm.put("img", path);
 
             // Noticing listview about the dataset changes
             adapter.notifyDataSetChanged();
