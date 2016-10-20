@@ -66,7 +66,7 @@ public class ShakeEventManager implements SensorEventListener{
                 }
                 Log.d("SwA", "Mov counter ["+counter+"]");
 
-                if (counter >= MOV_COUNTS)
+                if (counter == MOV_COUNTS)
                     if (listener != null)
                         listener.onShake();
             }

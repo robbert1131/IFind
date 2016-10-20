@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -42,6 +44,10 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
     int Minprijs;
     int Maxprijs;
     boolean Desc;
+    String X;
+    String Y;
+    String minkm;
+    String maxkm;
     private ShakeEventManager sd;
 
     @Override
@@ -54,8 +60,13 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         Minprijs = getIntent().getExtras().getInt("minprijs");
         Maxprijs = getIntent().getExtras().getInt("maxprijs");
         Desc = getIntent().getExtras().getBoolean("Desc");
+        X = getIntent().getExtras().getString("x");
+        Y = getIntent().getExtras().getString("y");
+        minkm = getIntent().getExtras().getString("minkm");
+        maxkm = getIntent().getExtras().getString("maxkm");
         // URL to the JSON data
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc; //+ "&Rand=" + RandomJa;
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc + "&Rand=" + RandomJa + "&X=" +
+                X + "&Y=" + Y + "&minkm=" + minkm + "&maxkm=" + maxkm ;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
@@ -71,10 +82,11 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         sd.init(this);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+            public void onItemClick(final AdapterView<?> parent, View view,
+                                    final int position, long id) {
                 //Get the name from the array that is in the same position as the chosen listitem.
                 //Todo start intent and pass name using putExtra
+
                 SimpleAdapter adapter = adap;
                 int pos = position;
 
@@ -87,7 +99,32 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
                 startActivity(intent);
             }
         });
+
+
+        //Button pbutton = (Button) findViewById(R.id.btn_personal);
+
     }
+
+    public void myClickHandler(View v)
+    {
+        //get the row the clicked button is in
+        LinearLayout vwParentRow = (LinearLayout) findViewById(R.id.layoutbutton);
+        Button btnChild = (Button)vwParentRow.getChildAt(3);
+        btnChild.setText("I've been clicked!");
+        Log.d("clciked", "sdfsdf");
+        final int position = mListView.getPositionForView(v);
+        SimpleAdapter adapter = adap;
+
+        HashMap<String, Object> hm = (HashMap<String, Object>) adapter.getItem(position);
+        imgurl = (String) hm.get("Title");
+        Intent intent = new Intent(this, PersonalList.class);
+        intent.putExtra("map", hm);
+        startActivity(intent);
+        //vwParentRow.refreshDrawableState();
+
+    }
+
+
 
     /** A method to download json data from url */
     private String downloadUrl(String strUrl) throws IOException {
@@ -195,6 +232,8 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
             adap = new SimpleAdapter(getBaseContext(), product, R.layout.product_listview, from, to);
 
             return adap;
+
+
         }
 
         /** Invoked by the Android on "doInBackground" is executed */
