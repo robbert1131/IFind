@@ -38,6 +38,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static android.R.attr.x;
+import static android.R.attr.y;
 import static android.widget.Toast.*;
 
 public class HomePage extends AppCompatActivity {
@@ -54,12 +56,13 @@ public class HomePage extends AppCompatActivity {
     String artname = "";
     Integer count = 0;
     String R2 = "";
+    GPSTracker gps;
     Integer enabledbuttons = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
-
+        gps = new GPSTracker(this);
         if (isNetworkAvailable() == false){
             Context context = getApplicationContext();
             CharSequence text = "Geen actieve internet verbinding check uw verbinding!";
@@ -174,12 +177,16 @@ public class HomePage extends AppCompatActivity {
                  Integer afstand = 0;
                  Integer minprijs = rangeSeekBar.getSelectedMinValue();
                  Integer maxprijs = rangeSeekBar.getSelectedMaxValue();
+                 Integer minkm = RangeSeekBarafstand.getSelectedMinValue();
+                 Integer maxkm = RangeSeekBarafstand.getSelectedMaxValue();
                  Intent i = new Intent(getApplicationContext(), ProductList.class);
                  i.putExtra("Title", zoekterm);
                  i.putExtra("Desc", Desc);
                  i.putExtra("km", afstand);
                  i.putExtra("minprijs", minprijs);
                  i.putExtra("maxprijs", maxprijs);
+                 i.putExtra("minkm", minkm);
+                 i.putExtra("maxkm", maxkm);
                  startActivity(i);
              }
             }
@@ -213,9 +220,11 @@ public class HomePage extends AppCompatActivity {
 
                     String[] separated = R2.split(",");
                     rangeSeekBar.setRangeValues(Integer.valueOf(separated[0]), Integer.valueOf(separated[1]) + 1);
+                    RangeSeekBarafstand.setRangeValues(Integer.valueOf(separated[2]), Integer.valueOf(separated[3]) + 1);
                     rangeSeekBar.setSelectedMinValue(Integer.valueOf(separated[0]));
                     rangeSeekBar.setSelectedMaxValue(Integer.valueOf(separated[1]));
-
+                    RangeSeekBarafstand.setSelectedMinValue(Integer.valueOf(separated[2]));
+                    RangeSeekBarafstand.setSelectedMaxValue(Integer.valueOf(separated[3]));
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 
@@ -261,8 +270,18 @@ public class HomePage extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             String result = "";
             try {
-                String sUrl = "http://95.97.27.12/IFind/JSONpresearch.php?Name=";
-                sUrl = sUrl + artname;
+                String x = null;
+                String y = null;
+
+                if(gps.canGetLocation()){
+                    double dx = gps.getLatitude();
+                    double dy = gps.getLongitude();
+                    y = Double.toString(dx);
+                    x = Double.toString(dy);
+                }
+
+                String sUrl = "http://95.97.27.12/IFind/JSONpresearch.php?Name=" + artname + "&X=" + x + "&Y=" + y;
+                //sUrl = sUrl + artname;
                 URL url = new URL(sUrl);
                 urlConnection = (HttpURLConnection) url.openConnection();
 
@@ -301,6 +320,9 @@ public class HomePage extends AppCompatActivity {
             R2 = result;
 
             //super.onPostExecute(s);
+        }
+
+        public void getSystemService(String locationService) {
         }
     }
     private boolean isNetworkAvailable() {
