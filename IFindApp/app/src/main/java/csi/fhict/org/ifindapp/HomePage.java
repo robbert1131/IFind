@@ -54,6 +54,8 @@ public class HomePage extends AppCompatActivity {
     RadioButton radiodesc;
     RadioButton radiodesc2;
     String artname = "";
+    String x;
+    String y;
     Integer count = 0;
     String R2 = "";
     GPSTracker gps;
@@ -187,6 +189,8 @@ public class HomePage extends AppCompatActivity {
                  i.putExtra("maxprijs", maxprijs);
                  i.putExtra("minkm", minkm);
                  i.putExtra("maxkm", maxkm);
+                 i.putExtra("x", x);
+                 i.putExtra("y", y);
                  startActivity(i);
              }
             }
@@ -270,8 +274,7 @@ public class HomePage extends AppCompatActivity {
             HttpURLConnection urlConnection = null;
             String result = "";
             try {
-                String x = null;
-                String y = null;
+
 
                 if(gps.canGetLocation()){
                     double dx = gps.getLatitude();
