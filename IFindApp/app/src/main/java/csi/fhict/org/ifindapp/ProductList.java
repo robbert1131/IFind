@@ -511,7 +511,6 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
                 break;
 
         }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override

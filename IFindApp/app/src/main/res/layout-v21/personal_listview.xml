@@ -63,13 +63,6 @@
             android:layout_height="40dp"
             android:id="@+id/layoutbutton">
             <Button
-                android:id="@+id/btn_personal"
-                android:onClick="myClickHandler"
-                android:background="@android:drawable/ic_menu_add"
-                android:layout_height="40dp"
-                android:layout_width="40dp" />
-
-            <Button
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/btn_share"

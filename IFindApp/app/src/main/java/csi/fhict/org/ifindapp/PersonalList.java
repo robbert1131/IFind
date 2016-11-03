@@ -1,15 +1,21 @@
 package csi.fhict.org.ifindapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -24,14 +30,12 @@ import java.util.Map;
  * Created by Gregory on 20-10-2016.
  */
 
-public class PersonalList extends AppCompatActivity implements SimpleGestureFilter.SimpleGestureListener {
+public class PersonalList extends AppCompatActivity {
 
-    private SimpleGestureFilter detector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_list);
-        detector = new SimpleGestureFilter(this, this);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //SharedPreferences keyValues = getApplicationContext().getSharedPreferences("Your_Shared_Prefs", Context.MODE_PRIVATE);
@@ -55,46 +59,39 @@ public class PersonalList extends AppCompatActivity implements SimpleGestureFilt
                 "Desc", "img", "Date", "Prijs", "Loc" };
         int[] to = new int[] { R.id.Title, R.id.Desc,  R.id.Image_product, R.id.Date, R.id.Price, R.id.Loc };
 //
-        SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), arr, R.layout.product_listview , from, to);
+        SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), arr, R.layout.personal_listview , from, to);
         //setListAdapter(adapter);
         ListView mListview = (ListView) findViewById(R.id.personal_list);
         mListview.setAdapter(adapter);
     }
 
-    @Override
-    public void onSwipe(int direction) {
-        String str = "";
+    public void myShareHandler(View v){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Delen met: ");
+        builder1.setCancelable(true);
+        final EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder1.setView(input);
+        builder1.setPositiveButton(
+                "Ja",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
-        switch (direction) {
+        builder1.setNegativeButton(
+                "Nee",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
-            case SimpleGestureFilter.SWIPE_RIGHT : str = "Swipe Right";
-                Intent intent = new Intent(getApplicationContext(), ProductList.class);
-                startActivity(intent);
-                break;
-            case SimpleGestureFilter.SWIPE_LEFT :  str = "Swipe Left";
-//                Intent i = new Intent(getApplicationContext(), PersonalList.class);
-//                startActivity(i);
-                break;
-            case SimpleGestureFilter.SWIPE_DOWN :  str = "Swipe Down";
-                break;
-            case SimpleGestureFilter.SWIPE_UP :    str = "Swipe Up";
-                break;
-
-        }
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDoubleTap() {
-        Intent intent = new Intent(getApplicationContext(), ProductList.class);
-        startActivity(intent);
-        Toast.makeText(this, "Double Tap", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent me){
-        // Call onTouchEvent of SimpleGestureFilter class
-        this.detector.onTouchEvent(me);
-        return super.dispatchTouchEvent(me);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
