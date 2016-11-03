@@ -1,6 +1,7 @@
 package csi.fhict.org.ifindapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -9,13 +10,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.View;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -39,13 +43,14 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+
 import static java.security.AccessController.getContext;
 
 /**
  * Created by Gregory on 6-10-2016.
  */
 
-public class ProductList extends AppCompatActivity implements ShakeEventManager.ShakeListener {
+public class ProductList extends AppCompatActivity implements ShakeEventManager.ShakeListener, SimpleGestureFilter.SimpleGestureListener {
 
     ListView mListView;
     SimpleAdapter adap;
@@ -60,6 +65,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
     String minkm;
     String maxkm;
     private ShakeEventManager sd;
+    private SimpleGestureFilter detector;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -71,6 +77,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_list);
 
+        detector = new SimpleGestureFilter(this, this);
 
         title = getIntent().getExtras().getString("Title");
         Minprijs = getIntent().getExtras().getInt("minprijs");
@@ -127,9 +134,7 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
     public void myClickHandler(View v) {
         //get the row the clicked button is in
         LinearLayout vwParentRow = (LinearLayout) findViewById(R.id.layoutbutton);
-        Button btnChild = (Button) vwParentRow.getChildAt(3);
-        btnChild.setText("I've been clicked!");
-        Log.d("clciked", "sdfsdf");
+        Button btnChild = (Button) vwParentRow.getChildAt(1);
         final int position = mListView.getPositionForView(v);
         SimpleAdapter adapter = adap;
 
@@ -152,6 +157,36 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
         editor.commit();
         Intent intent = new Intent(this, PersonalList.class);
         startActivity(intent);
+    }
+
+    public void myShareHandler(View v){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage("Delen met: ");
+        builder1.setCancelable(true);
+        final EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder1.setView(input);
+        builder1.setPositiveButton(
+                "Ja",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Nee",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 
 
@@ -426,7 +461,8 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
     }
 
     private void createData() {
-        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc + "&Rand=" + RandomJa;
+        String strUrl = "http://95.97.27.12/IFind/JSONview.php?Name=" + title + "&Min_Prijs=" + Minprijs + "&Max_Prijs=" + Maxprijs + "&Desc=" + Desc + "&Rand=" + RandomJa + "&X=" +
+                X + "&Y=" + Y + "&minkm=" + minkm + "&maxkm=" + maxkm;
 
         // Creating a new non-ui thread task to download json data
         DownloadTask downloadTask = new DownloadTask();
@@ -445,17 +481,51 @@ public class ProductList extends AppCompatActivity implements ShakeEventManager.
 
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
         sd.register();
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
         sd.deregister();
+    }
+
+    @Override
+    public void onSwipe(int direction) {
+        String str = "";
+
+        switch (direction) {
+
+            case SimpleGestureFilter.SWIPE_RIGHT : str = "Swipe Right";
+                break;
+            case SimpleGestureFilter.SWIPE_LEFT :  str = "Swipe Left";
+                Intent i = new Intent(getApplicationContext(), PersonalList.class);
+                startActivity(i);
+                break;
+            case SimpleGestureFilter.SWIPE_DOWN :  str = "Swipe Down";
+                break;
+            case SimpleGestureFilter.SWIPE_UP :    str = "Swipe Up";
+                break;
+
+        }
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDoubleTap() {
+        Intent i = new Intent(getApplicationContext(), PersonalList.class);
+        startActivity(i);
+        Toast.makeText(this, "Double Tap", Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent me){
+        // Call onTouchEvent of SimpleGestureFilter class
+        this.detector.onTouchEvent(me);
+        return super.dispatchTouchEvent(me);
     }
 }

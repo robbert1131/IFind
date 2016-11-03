@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <ImageView
         android:layout_width="125dp"
@@ -9,16 +10,15 @@
         android:id="@+id/Image_product" />
 
     <LinearLayout
-        android:layout_width="170dp"
-        android:layout_height="match_parent"
+        android:layout_width="158dp"
         android:orientation="vertical"
-        android:paddingLeft="5dp">
+        android:paddingLeft="5dp"
+        android:layout_height="150dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/Title"
-            android:textColor="@color/colorBlack"/>
+            android:id="@+id/Title" />
 
         <TextView
             android:layout_width="match_parent"
@@ -28,11 +28,11 @@
 
     </LinearLayout>
     <LinearLayout
-        android:layout_width="108dp"
-        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/layoutbutton"
-        android:descendantFocusability="blocksDescendants">
+        android:descendantFocusability="blocksDescendants"
+        android:layout_weight="0.41"
+        android:layout_width="110dp"
+        android:layout_height="150dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -57,13 +57,26 @@
             android:textColor="@color/colorPrimary"
             android:paddingLeft="10dp"/>
 
-        <Button
-            android:text="To List"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_personal"
-            android:onClick="myClickHandler"/>
+        <LinearLayout
+            android:layout_width="110dp"
+            android:orientation="horizontal"
+            android:layout_height="40dp"
+            android:id="@+id/layoutbutton">
+            <Button
+                android:id="@+id/btn_personal"
+                android:onClick="myClickHandler"
+                android:background="@android:drawable/ic_menu_add"
+                android:layout_height="40dp"
+                android:layout_width="40dp" />
 
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_share"
+                android:background="@android:drawable/ic_menu_share"
+                android:layout_marginLeft="15dp"
+                android:onClick="myShareHandler"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

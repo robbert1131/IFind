@@ -60,10 +60,12 @@ public class HomePage extends AppCompatActivity {
     String R2 = "";
     GPSTracker gps;
     Integer enabledbuttons = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
         gps = new GPSTracker(this);
         if (isNetworkAvailable() == false){
             Context context = getApplicationContext();
